@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, render_template
 from flask_cors import CORS
 import tinder_api
+from random import random
 
 # configuration
 DEBUG = True
@@ -14,9 +15,14 @@ CORS(app, resources={r'/*': {'origins': '*'}})
 
 
 # sanity check route
-@app.route('/recs/<tinder_token>', methods=['GET'])
-def index(tinder_token):
-    return render_template('index.html', username=username)
+@app.route('/', methods=['GET'])
+def show_rec():
+    return render_template('index.html', random=random())
+
+@app.route('/SomeFunction')
+def SomeFunction():
+    print('In SomeFunction')
+    return str(random())
 
 if __name__ == '__main__':
     app.run()

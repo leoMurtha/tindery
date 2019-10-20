@@ -1,4 +1,3 @@
-import tinder_api
 import datetime
 import requests
 from time import sleep
@@ -11,7 +10,8 @@ IMAGE_FOLDER = './images'
 
 class Person():
 
-    def __init__(self, data):
+    def __init__(self, data, tinder_api):
+        self.tinder_api = tinder_api
         self.id = data['_id']
         self.name = data.get('name', 'unknown')
         self.bio = data.get('bio', '')
@@ -37,14 +37,14 @@ class Person():
         return "{self.id}  -  {self.name} ({self.birth_date.strftime('%d.%m.%Y')})"
 
     def like(self):
-        if tinder_api.like(self.id):
+        if self.tinder_api.like(self.id):
             self.download_images(LIKE)
             return True
 
         return False
 
     def dislike(self):
-        if tinder_api.dislike(self.id):
+        if self.tinder_api.dislike(self.id):
             self.download_images(DISLIKE)
             return True
         return False

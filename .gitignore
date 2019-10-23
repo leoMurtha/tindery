@@ -208,5 +208,5 @@ public
 /images
 /tf
 *.json
-./*.txt
-./*.csv
+*.txt
+*.csv

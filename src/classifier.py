@@ -1,5 +1,9 @@
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
 import numpy as np
 import tensorflow as tf
+
+
 
 class Classifier():
     def __init__(self, graph, labels):
@@ -10,7 +14,7 @@ class Classifier():
         self._input_operation = self._graph.get_operation_by_name("import/Placeholder")
         self._output_operation = self._graph.get_operation_by_name("import/final_result")
 
-        self._session = tf.Session(graph=self._graph)
+        self._session = tf.compat.v1.Session(graph=self._graph)
 
     def classify(self, image):
         t = self.read_tensor_from_image_content(image)
@@ -36,7 +40,7 @@ class Classifier():
     @staticmethod
     def load_graph(model_file):
         graph = tf.Graph()
-        graph_def = tf.GraphDef()
+        graph_def = tf.compat.v1.GraphDef()
         with open(model_file, "rb") as f:
             graph_def.ParseFromString(f.read())
         with graph.as_default():
@@ -46,7 +50,7 @@ class Classifier():
     @staticmethod
     def load_labels(label_file):
         label = []
-        proto_as_ascii_lines = tf.gfile.GFile(label_file).readlines()
+        proto_as_ascii_lines = tf.io.gfile.GFile(label_file).readlines()
         for l in proto_as_ascii_lines:
             label.append(l.rstrip())
         return label
@@ -61,7 +65,7 @@ class Classifier():
             image, channels=3, name="jpeg_reader")
         float_caster = tf.cast(image_reader, tf.float32)
         dims_expander = tf.expand_dims(float_caster, 0)
-        resized = tf.image.resize_bilinear(dims_expander, [input_height, input_width])
+        resized = tf.compat.v1.image.resize_bilinear(dims_expander, [input_height, input_width])
         normalized = tf.divide(tf.subtract(resized, [input_mean]), [input_std])
         sess = tf.Session()
         result = sess.run(normalized)

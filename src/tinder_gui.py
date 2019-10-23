@@ -79,7 +79,7 @@ if __name__ == "__main__":
 
     persons = []
     for i in range(2):
-        persons.extend(api.get_recs_v2('pt-br'))
+        persons.extend(api.get_fast_match())
         sleep(5)
 
     total = len(persons)

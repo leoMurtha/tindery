@@ -42,17 +42,24 @@ class Person():
     def __repr__(self):
         return "{self.id}  -  {self.name} ({self.birth_date.strftime('%d.%m.%Y')})"
 
-    def like(self):
-        #if self.tinder_api.like(self.id):
-        self.save_images(LIKE)
-            # self.download_images(LIKE)
-        #    return True
+    def like(self, training=True):
+        if not training:
+            self.tinder_api.like(self.id)
+            return True
+        else:
+            self.save_images(LIKE)
+            return True
 
         return False
 
-    def dislike(self):
-        #if self.tinder_api.dislike(self.id):
-        self.save_images(DISLIKE)
+    def dislike(self, training=True):
+        if not training:
+            self.tinder_api.dislike(self.id)
+            return True
+        else:
+            self.save_images(DISLIKE)
+            return True
+        
         return True
 
         #return False
@@ -94,24 +101,18 @@ class Person():
     #                'bio': self.bio, 'birth_date': self.birth_date, ''}
 
     def predict_likeliness(self, classifier, sess):
-        print('Likeliness')
         ratings = []
-        for image in self.images:
-            r = requests.get(image, stream=True)
-            certainty = classifier.classify(r.content)
-            print(certainty)
+        images = self.download_images()
+        
+        for image in images:
+            certainty = classifier.classify(image)
             pos = float(certainty["like"])
             ratings.append(pos)
 
         ratings = np.array(ratings)
-        #ratings.sort(reverse=True)
-        #ratings = ratings[:5]
-        print('Ratings is over')
+        
         if len(ratings) == 0:
             return 0.001, ratings
 
-        #print(x)
-        #print(y)
         print('SCORE: %f' % ratings.mean())
-        #return ratings[0]*0.6 + sum(ratings[1:])/len(ratings[1:])*0.4, ratings
         return ratings.mean(), ratings

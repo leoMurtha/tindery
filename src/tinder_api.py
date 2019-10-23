@@ -5,6 +5,8 @@ from person import Person
 
 
 class API():
+    me = None
+
     headers = {
         'app_version': '6.9.4',
         'platform': 'ios',
@@ -23,6 +25,10 @@ class API():
                 f.close()
 
         self.headers['X-Auth-Token'] = tinder_token
+        self_data = self.get_self()
+        #print(self_data)
+
+        self.me = Person(self_data, self)
 
     def get_recommendations(self):
         '''
@@ -215,9 +221,6 @@ class API():
             r = requests.get(url, headers=self.headers)
             
             recs = r.json()['data']['results']
-            print(recs[0]['user']['_id'])
-            
-            #print(recs[0]['user'])
             recs = [Person(rec['user'], self, fast_match=True) for rec in recs]
             return recs
         except requests.exceptions.RequestException as e:

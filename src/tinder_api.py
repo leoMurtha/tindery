@@ -127,7 +127,7 @@ class API():
 
             for rec in recs:
                 rec['user'].update(rec['spotify'])
-            recs = [rec['user'] for rec in recs]
+            recs = [Person(rec['user'], self) for rec in recs]
             return recs
         except Exception as e:
             print('excepted %s' % e)
@@ -209,18 +209,16 @@ class API():
         except requests.exceptions.RequestException as e:
             print("Something went wrong. Could not get your match info:", e)
 
-    def see_who_liked(self):
+    def get_fast_match(self):
         try:
-            url = self.host + 'v2/fast-match/teasers'
+            url = self.host + '/v2/fast-match/teasers'
             r = requests.get(url, headers=self.headers)
-            return r.json()
+            
+            recs = r.json()['data']['results']
+            print(recs[0]['user']['_id'])
+            
+            #print(recs[0]['user'])
+            recs = [Person(rec['user'], self, fast_match=True) for rec in recs]
+            return recs
         except requests.exceptions.RequestException as e:
             print("Something went wrong. Could not get your match info:", e)
-
-    # def see_friends():
-    #     try:
-    #         url = self.host + '/group/friends'
-    #         r = requests.get(url, headers=self.headers)
-    #         return r.json()['results']
-    #     except requests.exceptions.RequestException as e:
-    #         print("Something went wrong. Could not get your Facebook friends:", e)

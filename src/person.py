@@ -3,6 +3,7 @@ import requests
 from time import sleep
 from random import random
 import numpy as np
+import os
 
 LIKE = 1
 DISLIKE = 0
@@ -83,7 +84,7 @@ class Person():
             CLASS = 'like'
         else:
             CLASS = 'dislike'
-
+        
         for image in self.downloaded_images:
 
             image_path = '%s/%s/%s_%d.jpeg' % (IMAGE_FOLDER,

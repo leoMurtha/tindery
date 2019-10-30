@@ -29,14 +29,14 @@ class DisplayImage:
         
         self.image_label = Label(self.image_frame, highlightthickness=0, borderwidth=0)
         
-        #self.image_label.pack()
-        #self.dislike_user = Button(master, command=self.dislike, text="DISLIKE", width=17, default=ACTIVE, borderwidth=0)
-        #self.dislike_user.pack()
-        #self.next_image = Button(master, command=self.read_image, text="Next image", width=17, default=ACTIVE, borderwidth=0)
-        #self.next_image.pack()
-        #self.like_user = Button(master, command=selfself.image_label.bind("<Button-1>", self.like)
-        #.like, text="LIKE", width=17, default=ACTIVE, borderwidth=0)
-        #self.like_user.pack()
+        self.image_label.pack()
+        self.dislike_user = Button(master, command=self.dislike, text="DISLIKE", width=17, default=ACTIVE, borderwidth=0)
+        self.dislike_user.pack()
+        self.next_image = Button(master, command=self.read_image, text="Next image", width=17, default=ACTIVE, borderwidth=0)
+        self.next_image.pack()
+        self.like_user = Button(master, command=self.like, text="LIKE", width=17, default=ACTIVE, borderwidth=0)
+        self.like_user.pack()
+
         self.image_label.bind("<Button-1>", self.like)
         self.image_label.bind("<Button-2>", self.read_image)
         self.image_label.bind("<Button-3>", self.dislike)
@@ -48,7 +48,7 @@ class DisplayImage:
         return True
 
     def dislike(self, arg):
-        #self.person.dislike()
+        self.person.dislike()
         self.master.destroy()
         return False
 
@@ -78,9 +78,9 @@ if __name__ == "__main__":
     api = tinder_api.API()
 
     persons = []
-    for i in range(2):
-        persons.extend(api.get_fast_match())
-        sleep(5)
+    for i in range(4):
+        persons.extend(api.get_recs_v2('pt-br'))
+        sleep(3)
 
     total = len(persons)
     for i, person in enumerate(persons):

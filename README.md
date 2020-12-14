@@ -1,5 +1,5 @@
 # Tindery
-Tinder bot that automates swiping using machine/deep learning.
+Tinder bot that automates swiping using machine/deep learning using TensorFlow/Keras API.
 
 ## Pipeline
 
